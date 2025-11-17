@@ -566,9 +566,10 @@ class PyodideSandboxTool(BaseTool):
             try:
                 from langgraph.prebuilt import InjectedState
             except ImportError as e:
+                print(e)
                 error_msg = (
-                    "The 'langgraph' package is required when using a stateful sandbox."
-                    " Please install it with 'pip install langgraph'."
+                    "The 'langgraph' and 'langgraph-prebuilt' packages are required when using a stateful sandbox."
+                    " Please install them with 'pip install langgraph>=1.0.3 langgraph-prebuilt>=1.0.2'."
                 )
                 raise ImportError(error_msg) from e
 
@@ -656,7 +657,14 @@ class PyodideSandboxTool(BaseTool):
             tool_result = result.stdout
 
         if self.stateful:
-            from langgraph.types import Command
+            try:
+                from langgraph.types import Command
+            except ImportError as e:
+                error_msg = (
+                    "The 'langgraph' package is required when using a stateful sandbox."
+                    " Please install it with 'pip install langgraph>=1.0.3'."
+                )
+                raise ImportError(error_msg) from e
 
             # if the tool is used with a stateful sandbox,
             # we need to update the graph state with the new session bytes and metadata
@@ -718,7 +726,14 @@ class PyodideSandboxTool(BaseTool):
             tool_result = result.stdout
 
         if self.stateful:
-            from langgraph.types import Command
+            try:
+                from langgraph.types import Command
+            except ImportError as e:
+                error_msg = (
+                    "The 'langgraph' package is required when using a stateful sandbox."
+                    " Please install it with 'pip install langgraph>=1.0.3'."
+                )
+                raise ImportError(error_msg) from e
 
             # if the tool is used with a stateful sandbox,
             # we need to update the graph state with the new session bytes and metadata
